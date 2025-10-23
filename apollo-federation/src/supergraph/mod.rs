@@ -109,7 +109,13 @@ impl Supergraph<Merged> {
     }
 
     pub fn assume_satisfiable(self) -> Supergraph<Satisfiable> {
-        todo!("unimplemented")
+        // Convert Valid<Schema> to ValidFederationSchema
+        let schema = self.state.schema.clone();
+        let federation_schema =
+            ValidFederationSchema::new(schema).expect("Schema should be valid for federation");
+
+        // Create Satisfiable state with existing hints
+        Supergraph::<Satisfiable>::new(federation_schema, self.state.hints)
     }
 
     pub fn schema(&self) -> &Valid<Schema> {
